@@ -14,7 +14,7 @@ class Category(models.Model):
         return self.category_title
 
 class Product(models.Model):
-    products_id = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category_id = models.ForeignKey(Category ,related_name='categoryku' ,on_delete=models.CASCADE, )
     product_title = models.CharField(max_length=100)
     product_desc = models.TextField()
     product_image = models.ImageField(upload_to='images')

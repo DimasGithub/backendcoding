@@ -19,4 +19,6 @@ from django.urls.conf import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/',include(('register.urls', 'register'), namespace='register')),
+    path('api/',include(('api.urls', 'api'), namespace='api')),
+
 ]
