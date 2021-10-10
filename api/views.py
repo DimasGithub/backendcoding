@@ -1,3 +1,4 @@
+from django_filters import FilterSet, AllValuesFilter, DateTimeFilter, NumberFilter 
 from django.http import response
 from django.shortcuts import render
 from django.contrib.auth.models import User
@@ -10,23 +11,29 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated  # <-- Here
-from rest_framework import filters
+from rest_framework.filters import SearchFilter, OrderingFilter
+
 
 from api.models import Product, Category
 from api.serializer import ProductSerializer
 
-class DynamicSearchFilter(filters.SearchFilter):
+class DynamicSearchFilter(SearchFilter):
     def get_search_fields(self, view, request):
-        return request.GET.getlist('search_fields', [])
+        return request.GET.getlist('search_fields', ['product_title', 'product_desc', 'category_id__category_title'])
+
+class DynamicOrderingFilter(OrderingFilter):
+    def get_ordering_fields(self, view, request):
+        return request.GET.getlist('ordering_fields', ['product_title', 'product_price', 'category_id'])
 
 class ProductAPIView(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
-    filter_backends = (DynamicSearchFilter,)
+    permission_classes = (AllowAny,)
+    filter_backends = (DynamicSearchFilter, DynamicOrderingFilter,)
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    ordering = ['product_title', 'product_price', 'category_id']
 
 @api_view(['POST', 'GET'])
-
+@permission_classes([AllowAny,])
 def product_view(request):
     permission_classes = (IsAuthenticated,) 
     if request.method == 'GET':
@@ -42,7 +49,7 @@ def product_view(request):
 
 
 @api_view(['PUT', 'GET', 'DELETE'])
-
+@permission_classes([AllowAny,])
 def product_detail_view(request,id):
     permission_classes = (IsAuthenticated,) 
     query = Product.objects.get(id=id)
