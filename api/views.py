@@ -9,14 +9,26 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny, IsAuthenticated  # <-- Here
+from rest_framework import filters
 
 from api.models import Product, Category
 from api.serializer import ProductSerializer
 
+class DynamicSearchFilter(filters.SearchFilter):
+    def get_search_fields(self, view, request):
+        return request.GET.getlist('search_fields', [])
+
+class ProductAPIView(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    filter_backends = (DynamicSearchFilter,)
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
 @api_view(['POST', 'GET'])
-@permission_classes([AllowAny])
+
 def product_view(request):
+    permission_classes = (IsAuthenticated,) 
     if request.method == 'GET':
         product = Product.objects.all()
         serializer = ProductSerializer(product, many=True)
@@ -28,9 +40,11 @@ def product_view(request):
             return serializer.errors
     return Response(serializer.data)
 
+
 @api_view(['PUT', 'GET', 'DELETE'])
-@permission_classes([AllowAny])
+
 def product_detail_view(request,id):
+    permission_classes = (IsAuthenticated,) 
     query = Product.objects.get(id=id)
     query2 = Product.objects.filter(id=id)
     if request.method == 'GET':
@@ -52,3 +66,4 @@ def product_detail_view(request,id):
         data = {}
         data['message'] = "data berhasil di hapus"
         return Response(data)
+

@@ -14,11 +14,15 @@ class Category(models.Model):
         return self.category_title
 
 class Product(models.Model):
-    category_id = models.ForeignKey(Category ,related_name='categoryku' ,on_delete=models.CASCADE, )
+    category_id = models.ForeignKey(Category ,related_name='kategori' ,on_delete=models.CASCADE, )
     product_title = models.CharField(max_length=100)
     product_desc = models.TextField()
     product_image = models.ImageField(upload_to='images')
     product_price = models.IntegerField(default=0)
     product_stock = models.IntegerField(default=0)
+    
+    class Meta:
+        unique_together = ['category_id', 'id']
+        ordering = ['id']
     def __str__(self):
         return self.product_title
