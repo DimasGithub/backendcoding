@@ -73,4 +73,3 @@ def product_detail_view(request,id):
         data = {}
         data['message'] = "data berhasil di hapus"
         return Response(data)
-

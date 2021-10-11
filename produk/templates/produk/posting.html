@@ -1,0 +1,63 @@
+{% extends "index.html" %}
+{% load crispy_forms_tags %}
+{% block style %}
+<style>
+td{
+  vertical-align: top;
+}
+</style>
+{% endblock style %}
+{% block konten %}
+<div style="margin: 20px;">
+<h2 class="mb-4">{{header}}</h2>
+<form method="POST" enctype="multipart/form-data" novalidate>
+{% csrf_token %}
+                <table style= "height: 700px; width: 100%; margin-bottom: 30px; box-shadow: 7px 7px 20px; border-radius: 30px;" border="0">
+                        <tbody>
+                        <td>&nbsp;</td>
+                        <td>{{forms.product_title.label}}</td>
+                        <td>:</td>
+                        <td>{{forms.product_title|as_crispy_field}}</td>
+                        <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                        <td>&nbsp;</td>
+                        <td>{{forms.product_price.label}}</td>
+                        <td>:</td>
+                        <td>{{forms.product_price|as_crispy_field}}</td>
+                        <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                        <td>&nbsp;</td>
+                        <td>{{forms.product_desc.label}}</td>
+                        <td>:</td>
+                        <td>{{forms.product_desc|as_crispy_field}}</td>
+                        <td>&nbsp;</td>
+                        </tr>
+                        <td>&nbsp;</td>
+                        <td>{{forms.product_stock.label}}</td>
+                        <td>:</td>
+                        <td>{{forms.product_stock|as_crispy_field}}</td>
+                        <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                        <td>&nbsp;</td>
+                        <td>{{forms.product_image.label}}</td>
+                        <td>:</td>
+                        <td>{{forms.product_image|as_crispy_field}}</td>
+                        <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                        <td>&nbsp;</td>
+                        <td>{{forms.category_id.label}}</td>
+                        <td>:</td>
+                        <td>{{forms.category_id|as_crispy_field}}</td>
+                        <td>&nbsp;</td>
+                        </tr>
+                        <td colspan="4"> <button type="submit" class="btn btn-md btn-primary" style="margin-right: 10px; margin-bottom: 20px; border-radius: 50px;">Submit</button></td>
+                        </tr>
+                        </tbody>
+                </table>
+</form>
+</div>
+{% endblock konten %}
