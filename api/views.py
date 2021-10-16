@@ -15,7 +15,8 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 
 
 from api.models import Product, Category
-from api.serializer import ProductSerializer
+from api.serializer import ProductSerializer, ShippingSerializer
+
 
 class DynamicSearchFilter(SearchFilter):
     def get_search_fields(self, view, request):
@@ -32,6 +33,17 @@ class ProductAPIView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
     ordering = ['product_title', 'product_price', 'category_id']
 
+@api_view(['POST', 'GET'])
+@permission_classes([AllowAny,])
+def shipping(request):
+    if request.method == 'POST':
+        shipserializer = ShippingSerializer(data=request.data)
+        if shipserializer.is_valid():
+            data={}
+            data = shipserializer.save()
+        else:
+            data = shipserializer.errors
+    return Response(data)
 @api_view(['POST', 'GET'])
 @permission_classes([AllowAny,])
 def product_view(request):
