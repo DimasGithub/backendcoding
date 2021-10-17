@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-
 class UserSerializer(serializers.ModelSerializer):
     seller_phone_number = serializers.CharField(max_length=12)
     password = serializers.CharField(style = {'input_type':'password'}, write_only = True)
@@ -33,5 +32,4 @@ class UserSerializer(serializers.ModelSerializer):
         user.is_superuser = True
         user.is_admin = True
         user.save()
-        
         return user

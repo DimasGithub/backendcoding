@@ -1,9 +1,7 @@
 import math
+import http.client
 from api.models import Product, Category
-
 from rest_framework import serializers
-
-
 
 class ShippingSerializer(serializers.Serializer):
     origin = serializers.CharField()
@@ -62,7 +60,6 @@ class ShippingSerializer(serializers.Serializer):
         totalseluruh = totalprice + priceadm
         print('total biaya + admin = '+ str(totalseluruh))
         return totalseluruh
-
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

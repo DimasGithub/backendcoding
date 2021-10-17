@@ -1,3 +1,6 @@
+import http.client
+import json
+
 from django_filters import FilterSet, AllValuesFilter, DateTimeFilter, NumberFilter 
 from django.http import response
 from django.shortcuts import render
@@ -17,6 +20,30 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from api.models import Product, Category
 from api.serializer import ProductSerializer, ShippingSerializer
 
+@api_view(['POST', 'GET'])
+@permission_classes([AllowAny,])
+def viewsprice(request):
+    if request.method == 'GET':
+        conn = http.client.HTTPSConnection("api.rajaongkir.com")
+        payload = 'origin=501&destination=352&weight=1700&courier=jne'
+        headers = {
+            'key': " e201e1a2929bb050febcf738362895cb",
+            'content-type': "application/x-www-form-urlencoded"
+            }
+
+        conn.request("POST", "/starter/cost", payload, headers)
+        data = {}
+        data = conn.getresponse().read()
+        json_data = json.loads(data)
+        resdata = {}
+        resdata['Message'] = 'Shipping API provider info'
+        resdata['Provider'] = 'Raja ongkir'
+        resdata['Origin'] = json_data['rajaongkir']['origin_details']['city_name']
+        resdata['Destination'] = json_data['rajaongkir']['destination_details']['city_name']
+        resdata['Courier'] = json_data['rajaongkir']['results'][0]['name']
+        resdata['Type'] = json_data['rajaongkir']['results'][0]['costs'][0]['description']
+        resdata['Price'] = json_data['rajaongkir']['results'][0]['costs'][0]['cost'][0]['value']
+    return Response(resdata)
 
 class DynamicSearchFilter(SearchFilter):
     def get_search_fields(self, view, request):
