@@ -16,7 +16,6 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated  # <-- Here
 from rest_framework.filters import SearchFilter, OrderingFilter
 
-
 from api.models import Product, Category
 from api.serializer import ProductSerializer, ShippingSerializer
 
@@ -30,7 +29,6 @@ def viewsprice(request):
             'key': " e201e1a2929bb050febcf738362895cb",
             'content-type': "application/x-www-form-urlencoded"
             }
-
         conn.request("POST", "/starter/cost", payload, headers)
         data = {}
         data = conn.getresponse().read()

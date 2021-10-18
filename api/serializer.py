@@ -67,7 +67,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
-    categoryku  = CategorySerializer(many=True, read_only=True)
+    category_id  = CategorySerializer()
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ('id','product_title', 'product_desc', 'product_image', 'product_price', 'product_stock', 'category_id',)
